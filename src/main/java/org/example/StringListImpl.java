@@ -26,7 +26,10 @@ public class StringListImpl implements StringList {
 
     @Override
     public String set(int index, String item) {
-        return null;
+        validateIndex(index);
+        validateItem(item);
+        storage[index] = item;
+        return item;
     }
 
     @Override
@@ -41,7 +44,8 @@ public class StringListImpl implements StringList {
 
     @Override
     public boolean contains(String item) {
-        return false;
+
+        return indexOf(item)!=-1;
     }
 
     @Override
@@ -57,12 +61,19 @@ public class StringListImpl implements StringList {
 
     @Override
     public int lastIndexOf(String item) {
-        return 0;
+        for (int i = size-1; i >=0;i--) {
+            String s = storage[i];
+            if(s.equals(item)){
+                return i;
+            }
+        }
+        return -1;
     }
 
     @Override
     public String get(int index) {
-        return null;
+        validateIndex(index);
+        return storage[index];
     }
 
     @Override
