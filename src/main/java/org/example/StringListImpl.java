@@ -16,12 +16,24 @@ public class StringListImpl implements StringList {
     @Override
 
     public String add(String item) {
-        return null;
+        validateSize();
+        validateItem(item);
+        storage[size++] = item;
+        return item;
     }
 
     @Override
     public String add(int index, String item) {
-        return null;
+        validateSize();
+        validateItem(item);
+        validateIndex(index);
+        if (index==size){
+            storage[size++] = item;
+        }
+        System.arraycopy(storage,index,storage,index+1,size-index);
+        storage[index] = item;
+        size++;
+        return item;
     }
 
     @Override
