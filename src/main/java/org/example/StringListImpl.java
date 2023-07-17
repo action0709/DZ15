@@ -46,7 +46,13 @@ public class StringListImpl implements StringList {
 
     @Override
     public int indexOf(String item) {
-        return 0;
+        for (int i = 0; i < size; i++) {
+            String s = storage[i];
+            if(s.equals(item)){
+                return i;
+            }
+        }
+        return -1;
     }
 
     @Override
