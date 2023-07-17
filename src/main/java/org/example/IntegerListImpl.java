@@ -9,6 +9,7 @@ public class IntegerListImpl implements IntegerList {
     public IntegerListImpl() {
         storage = new Integer[10];
     }
+
     public IntegerListImpl(int inSize) {
         storage = new Integer[inSize];
     }
@@ -27,10 +28,10 @@ public class IntegerListImpl implements IntegerList {
         validateSize();
         validateItem(item);
         validateIndex(index);
-        if (index==size){
+        if (index == size) {
             storage[size++] = item;
         }
-        System.arraycopy(storage,index,storage,index+1,size-index);
+        System.arraycopy(storage, index, storage, index + 1, size - index);
         storage[index] = item;
         size++;
         return item;
@@ -46,17 +47,17 @@ public class IntegerListImpl implements IntegerList {
 
     @Override
     public Integer remove(Integer item) {
-       validateItem(item);
+        validateItem(item);
         int index = indexOf(item);
         return remove(index);
     }
 
     @Override
     public Integer remove(int index) {
-      validateIndex(index);
+        validateIndex(index);
         Integer item = storage[index];
-        if (index!=size){
-            System.arraycopy(storage,index+1,storage,index,size-index);
+        if (index != size) {
+            System.arraycopy(storage, index + 1, storage, index, size - index);
         }
 
         size--;
@@ -66,14 +67,16 @@ public class IntegerListImpl implements IntegerList {
     @Override
     public boolean contains(Integer item) {
 
-        return indexOf(item)!=-1;
+        int[] storageCopy = toArray();
+        sort(storageCopy);
+        return binarySearch(storageCopy, item);
     }
 
     @Override
     public int indexOf(Integer item) {
         for (int i = 0; i < size; i++) {
             Integer s = storage[i];
-            if(s.equals(item)){
+            if (s.equals(item)) {
                 return i;
             }
         }
@@ -82,9 +85,9 @@ public class IntegerListImpl implements IntegerList {
 
     @Override
     public int lastIndexOf(Integer item) {
-        for (int i = size-1; i >=0;i--) {
+        for (int i = size - 1; i >= 0; i--) {
             Integer s = storage[i];
-            if(s.equals(item)){
+            if (s.equals(item)) {
                 return i;
             }
         }
@@ -100,7 +103,7 @@ public class IntegerListImpl implements IntegerList {
     @Override
     public boolean equals(IntegerList otherList) {
 
-        return Arrays.equals(this.toArray(),otherList.toArray());
+        return Arrays.equals(this.toArray(), otherList.toArray());
     }
 
     @Override
@@ -122,24 +125,57 @@ public class IntegerListImpl implements IntegerList {
 
     @Override
     public Integer[] toArray() {
-           return Arrays.copyOf(storage,size);
+        return Arrays.copyOf(storage, size);
     }
 
-    private void validateItem(Integer item){
-        if(item == null){
+    private void validateItem(Integer item) {
+        if (item == null) {
             throw new NullItemException();
         }
     }
 
-    private void validateSize(){
-        if (size == storage.length){
+    private void validateSize() {
+        if (size == storage.length) {
             throw new StorageFullException();
-                    }
+        }
     }
 
-    private void validateIndex(int Index){
-        if(Index<0||Index>size){
+    private void validateIndex(int Index) {
+        if (Index < 0 || Index > size) {
             throw new InvalidIndexException();
         }
     }
+
+    private void sort(Integer[] arr) {
+
+        for (int i = 1; i < arr.length; i++) {
+            int temp = arr[i];
+            int j = i;
+            while (j > 0 && arr[j - 1] >= temp) {
+                arr[j] = arr[j - 1];
+                j--;
+            }
+            arr[j] = temp;
+
+        }
+    }
+   private boolean binarySearch(int [] arr, Integer item) {
+       int min = 0;
+       int max = arr.length - 1;
+
+       while (min <= max) {
+           int mid = (min + max) / 2;
+
+           if (item == arr[mid]) {
+               return true;
+           }
+
+           if (item < arr[mid]) {
+               max = mid - 1;
+           } else {
+               min = mid + 1;
+           }
+       }
+       return false;
+   }
 }
