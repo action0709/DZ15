@@ -46,12 +46,21 @@ public class StringListImpl implements StringList {
 
     @Override
     public String remove(String item) {
-        return null;
+       validateItem(item);
+        int index = indexOf(item);
+        return remove(index);
     }
 
     @Override
     public String remove(int index) {
-        return null;
+      validateIndex(index);
+        String item = storage[index];
+        if (index!=size){
+            System.arraycopy(storage,index+1,storage,index,size-index);
+        }
+
+        size--;
+        return item;
     }
 
     @Override
